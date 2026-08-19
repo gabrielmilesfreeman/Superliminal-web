@@ -5,183 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUPERLIMINAL // FRAGRANCE</title>
     <style>
-        /* CSS Reset & Brutalist Foundations */
+        /* CSS Reset & Utilitarian Foundations */
         * { box-sizing: border-box; }
         body {
-            background-color: #d9d9d9;
+            background-color: #f0f0f0; /* Off-white / concrete */
             color: #000;
-            font-family: "Courier New", Courier, monospace;
+            font-family: "Courier New", Courier, monospace; /* Monospaced for industrial feel */
             margin: 0;
-            padding: 2vw;
+            padding: 0;
             text-transform: uppercase;
-        }
-        header {
-            border-bottom: 5px solid #000;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-        h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin: 0;
-            letter-spacing: -0.2vw;
-            line-height: 1;
-        }
-        .cart-status {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: #000;
-            color: #d9d9d9;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
         }
         
         /* Grid Layout */
-        .catalog {
+        .wrapper {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            min-height: 100vh;
+            border: 2px solid #000; /* Exposed structure */
         }
+        
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 2vw;
+            border-bottom: 2px solid #000;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin: 0;
+            letter-spacing: -0.1vw;
+            font-weight: 900;
+        }
+        
+        .cart-status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
         .product {
-            border: 3px solid #000;
-            background: #fff;
-            padding: 1rem;
+            border-right: 2px solid #000;
+            padding: 4vw;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            text-align: center;
         }
-        .product h2 {
-            margin: 0 0 1rem 0;
-            font-size: 2rem;
-            border-bottom: 2px dashed #000;
-            padding-bottom: 0.5rem;
+        
+        .product:last-child {
+            border-right: none;
         }
-        .product p {
-            font-size: 1rem;
-            line-height: 1.4;
-            flex-grow: 1;
+        
+        .product-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            margin: 0;
+            line-height: 1;
+            letter-spacing: -0.2vw;
+            font-weight: 900;
         }
-        .price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 1rem 0;
-        }
+        
         button.add-to-cart {
-            background: #d9d9d9;
+            width: 100%;
+            background: none;
             color: #000;
-            border: 3px solid #000;
+            border: 2px solid #000;
             padding: 1rem;
             font-family: inherit;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.1s;
         }
+        
         button.add-to-cart:hover {
             background: #000;
-            color: #fff;
+            color: #f0f0f0;
         }
 
-        /* Cart UI */
+        /* Cart UI (Minimal overlay) */
         #cart-panel {
             display: none;
             position: fixed;
-            top: 2vw;
-            right: 2vw;
-            width: 96vw;
-            max-width: 400px;
-            background: #000;
-            color: #fff;
-            border: 5px solid #fff;
+            top: 0; right: 0; bottom: 0;
+            width: 96vw; max-width: 400px;
+            background: #000; color: #f0f0f0;
+            border-left: 2px solid #f0f0f0;
             padding: 2rem;
             z-index: 100;
         }
         #cart-panel.active { display: block; }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #444;
-            padding: 0.5rem 0;
-            margin-bottom: 0.5rem;
+        .close-cart { cursor: pointer; text-decoration: underline; display: block; margin-bottom: 2rem;}
+
+        /* Mobile adaptation (Stack columns) */
+        @media (max-width: 768px) {
+            .wrapper { grid-template-columns: 1fr; }
+            header { grid-row: 1; grid-column: 1; }
+            .product { border-right: none; border-bottom: 2px solid #000; }
         }
-        #checkout-btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 1rem;
-            width: 100%;
-            font-family: inherit;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-        #checkout-btn:hover { background: #f00; color: #fff; }
-        .close-cart { cursor: pointer; text-decoration: underline; margin-bottom: 1rem; display: inline-block;}
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>SUPERLIMINAL</h1>
-        <div class="cart-status" onclick="toggleCart()">CART [ <span id="cart-count">0</span> ]</div>
-    </header>
+    <div class="wrapper">
+        <header>
+            <h1>SUPERLIMINAL</h1>
+            <div class="cart-status" onclick="toggleCart()">CART [ <span id="cart-count">0</span> ]</div>
+        </header>
 
-    <div class="catalog">
         <div class="product">
-            <h2>OYSTER</h2>
-            <p>Raw marine notes and industrial salinity. Enclosed in a clay-dipped shell. Requires physical extraction.</p>
-            <div class="price">$140.00</div>
-            <button class="add-to-cart" onclick="addToCart('OYSTER', 140)">Add to Cart</button>
+            <h2 class="product-title">OYSTER</h2>
+            <button class="add-to-cart" onclick="addToCart('OYSTER')">ADD TO CART</button>
         </div>
 
         <div class="product">
-            <h2>BOOKS OF MAY</h2>
-            <p>Paper, dust, and botanical decay. Structured, linear, and uncompromising.</p>
-            <div class="price">$120.00</div>
-            <button class="add-to-cart" onclick="addToCart('BOOKS OF MAY', 120)">Add to Cart</button>
+            <h2 class="product-title">HOLE</h2>
+            <button class="add-to-cart" onclick="addToCart('HOLE')">ADD TO CART</button>
+        </div>
+
+        <div class="product">
+            <h2 class="product-title">BOOK</h2>
+            <button class="add-to-cart" onclick="addToCart('BOOK')">ADD TO CART</button>
         </div>
     </div>
 
-    <!-- Hidden Cart Panel -->
+    <!-- Minimal Cart Panel -->
     <div id="cart-panel">
         <span class="close-cart" onclick="toggleCart()">[X] CLOSE CART</span>
-        <h2>YOUR ORDER</h2>
+        <h3>ORDER SUMMARY</h3>
         <div id="cart-items"></div>
-        <div class="cart-item" style="border:none; margin-top:1rem;">
-            <strong>TOTAL:</strong>
-            <strong id="cart-total">$0.00</strong>
-        </div>
-        <button id="checkout-btn" onclick="checkout()">PROCEED TO SECURE CHECKOUT</button>
+        <button style="width: 100%; border: 2px solid #f0f0f0; background: none; color: #f0f0f0; padding: 1rem; margin-top: 2rem;" onclick="checkout()">CHECKOUT</button>
     </div>
 
     <script>
-        let cart = [];
+        let cartCount = 0;
         
-        function addToCart(name, price) {
-            cart.push({name, price});
+        function addToCart(name) {
+            cartCount++;
             updateCartUI();
         }
 
         function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const itemsContainer = document.getElementById('cart-items');
-            itemsContainer.innerHTML = '';
-            
-            let total = 0;
-            cart.forEach(item => {
-                total += item.price;
-                itemsContainer.innerHTML += `
-                    <div class="cart-item">
-                        <span>${item.name}</span>
-                        <span>$${item.price}.00</span>
-                    </div>
-                `;
-            });
-            document.getElementById('cart-total').innerText = `$${total}.00`;
+            document.getElementById('cart-count').innerText = cartCount;
         }
 
         function toggleCart() {
@@ -189,7 +157,7 @@
         }
 
         function checkout() {
-            alert("Static HTML cannot process payments securely. You must connect a payment gateway.");
+            alert("A static file cannot process real payments. You must integrate a live payment service.");
         }
     </script>
 </body>
